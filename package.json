@@ -1,0 +1,15 @@
+{
+  "name": "be-my-valentine",
+  "version": "1.0.0",
+  "description": "Web based 'be my valentine' invitation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "valentine's",
+    "day"
+  ],
+  "author": "Kingsley Chimezie",
+  "license": "ISC"
+}

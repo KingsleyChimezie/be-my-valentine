@@ -1,0 +1,160 @@
+/*
+ * Created Date: Wednesday, 3rd February 2021, 4:05:10 pm
+ * Author: Kingsley Chimezie
+ * Original Author: https://codepen.io/caitlinhaaf/pen/KKpgpqX
+ */
+
+
+
+#bee {
+    width: 150px;
+    margin: 10vw;
+
+    /*  WRITE A MOTION PATH FOR YOUR BEE!  */
+
+    /*straight offset path*/
+      offset-path: path('M20,50 L150,50');
+
+    /*  ANIMATE YOUR BEE  */
+    animation: beeFly 20000ms infinite ease-in-out;
+}
+
+#frontWing {
+    transform-origin: 30% 50%;
+
+    /*  ANIMATE THE FRONT WING FLAPPING  */
+    animation: frontWingFlap 1s infinite alternate linear;
+}
+
+#backWing {
+    transform-origin: 30% 50%;
+
+    /*  ANIMATE THE BACK WING FLAPPING  */
+    animation: backWingFlap 1s infinite alternate linear;
+}
+
+/***  ANIMATIONS  ***/
+@keyframes beeFly {
+
+    /* start your bee at the start of your motion path */
+    0% {
+        offset-distance: 50%;
+        transform: scaleX(1);
+    }
+
+    /*  animate your bee to the end of your motion path  */
+    50% {
+        offset-distance: 100%;
+        transform: scaleX(1);
+    }
+
+    /*  flip your bee to face towards the start of the path  */
+    51% {
+        transform: scaleX(-1);
+    }
+
+    /* animate your bee back to the start of your motion path */
+    99% {
+        offset-distance: 0%;
+        transform: scaleX(-1);
+    }
+
+    /*  flip your bee to face forwards  */
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes frontWingFlap {
+
+    /*  flap front wing in one direction  */
+    to {
+        transform: rotate(-10deg)
+    }
+}
+
+@keyframes backWingFlap {
+
+    /*  flap back wing in opposite direction of front wing  */
+    to {
+        transform: rotate(10deg)
+    }
+}
+
+@keyframes heartbeat {
+
+    /*  have heart grow, and then shrink  */
+    to {
+        transform: scale(1.1)
+    }
+}
+
+/* ------------------------- */
+
+.greenFill {
+    fill: #afddb3;
+    stroke: #8dc690;
+    stroke-width: 3px;
+}
+
+.pinkFill {
+    fill: #f5bfd2;
+    stroke: #c9567e;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 3px;
+}
+
+.yellowFill {
+    fill: #ffc659;
+    stroke: #d1a045;
+    stroke-width: 4px;
+}
+
+.whiteFill {
+    fill: white;
+}
+
+.fillGrey {
+    fill: #999;
+}
+
+.outlineBlack {
+    stroke: #000;
+    stroke-miterlimit: 10;
+}
+
+.outlineWhite {
+    fill: none;
+    stroke: #fff;
+}
+
+.wings {
+    fill: #b7e6f9;
+    stroke: #80b1c4;
+    stroke-miterlimit: 10;
+    stroke-width: 4px;
+}
+
+.body {
+    fill: #ffc659;
+    stroke-width: 5px;
+    stroke-miterlimit: 10;
+    stroke: #d1a045;
+}
+
+.legs,
+.antennae {
+    stroke: #000;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.legs {
+    stroke-width: 8px;
+}
+
+.antennae {
+    stroke-width: 4px;
+}
