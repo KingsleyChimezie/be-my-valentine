@@ -4,7 +4,8 @@
  */
 
 
-/* VARIABLES DECLARATION
+ 
+/* VARIABLES
 ************************************************************************************/
  // Get elements
 let header = document.getElementById('header');
@@ -17,7 +18,7 @@ let btnNo = document.getElementById('btnNo');
 let btnChangeAnswer = document.getElementById('btnChangeAnswer');
 let lastAnswerDateText = document.getElementById('lastAnswerDate');
 
-// Object used to retrieve and send data to DB
+// Object used to temporarily store and send data to DB
 let dbData = {
     lastAnswer: '',
     lastAnswerDate: '',
@@ -25,8 +26,19 @@ let dbData = {
     submissionsArr: []
 };
 
-let cloudFirestoreIdExists = false;
-/************************************************************************************/
+
+
+/* GET PUBLIC IP
+************************************************************************************/
+const getIP = async () => {
+    try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const jsonObj = (res.json()).then(d => dbData.lastAnswerIP = d.ip);
+    } catch (err) {
+        console.error(err);
+    }
+};
+getIP();
 
 
 
@@ -39,36 +51,51 @@ firebase.analytics();
 const db = firebase.firestore();
 
 
-/* GET FIREBASE DATA
--------------------------------- */
-db.collection('valentines').get().then((snapshot) => {
-    snapshot.docs.forEach(doc => {
-        docData = doc.data();
-        // check if defined ID exists in DB
-        if (doc.id === data.cloudFirestoreId) {
-            cloudFirestoreIdExists = true;
+// Get Firebase data
+const getFirebaseData = async () => {
+    try {
+        // get collection document data, where the doc's ID matches the defined ID
+        const ref = db.collection(firestore.collectionName).doc(firestore.docID);
+        const doc = await ref.get();
+        const docData = doc.data();
 
-            console.log(Object.keys(docData).length === 0 && docData.constructor === Object);
+        // document does not exist
+        if (!doc.exists) {
+            setUI();
+            console.log(`Firstore collection '${firestore.collectionName}' with document ID '${firestore.docID}' does not exist.`);
+        } 
+        // document does exist
+        else {
+            setLocalObjToFirebaseData(docData);
         }
-    });
-});
-const setLocalObjToFirebaseData = (doc) => {
-    console.log("setLocalObjToFirebaseData");
-    // setting retrived Firbase data
-    data.valentinesFirstName = doc.data().valentinesFirstName;
-    data.valentinesLastName = doc.data().valentinesLastName;
-    data.lastAnswerHeading = doc.data().lastAnswerHeading;
-    data.headerMessage = doc.data().headerMessage;
-    data.resultHeaderYes = doc.data().resultHeaderYes;
-    data.resultHeaderNo = doc.data().resultHeaderNo;
-    data.yesImgLink = doc.data().yesImgLink;
-    data.noImgLink = doc.data().noImgLink;
+        
+    } catch (err) {
+        console.error(err);
+    }
 };
-/************************************************************************************/
+getFirebaseData();
+
+
+// setting Firebase data to local object
+const setLocalObjToFirebaseData = (docData) => {
+    dbData.lastAnswer = docData.lastAnswer;
+    dbData.lastAnswerDate = docData.lastAnswerDate;
+    dbData.lastAnswerIP = docData.lastAnswerIP;
+    dbData.submissionsArr = docData.submissionsArr;
+    console.log('DATA RETRIEVED FROM FIRESTORE: ', dbData);
+    setUI();
+};
+
+
+// setting Firebase data
+const setFirebaseDataToLocalObj = () => {
+    const ref = db.collection('valentines').doc(firestore.docID).set(dbData, { merge: true });
+    console.log('DATA ADDED TO FIRESTORE: ', dbData);
+};
 
 
 /* LOADER
--------------------------------- */
+---------------------------------------------------- */
 const load = () => {
     // scroll to top
     document.body.scrollTop = 0;
@@ -85,8 +112,52 @@ const load = () => {
 };
 
 
+
+/* SET UI 
+---------------------------------------------------- */
+const setUI = () => {
+    // set header title
+    header.innerHTML = `${uiData.valentinesFirstName} ${uiData.valentinesLastName}<br>${uiData.headerMessage}`;
+    
+    // Answer is yes
+    if (dbData.lastAnswer === 'yes') {
+        load();
+        resultHeader.innerHTML = uiData.resultHeaderYes;
+        lastAnswerDateText.innerHTML = `${uiData.lastAnswerHeading} ${dbData.lastAnswerDate}`;
+        resultImg.src = uiData.yesImgLink;
+        resultDiv.style.display = 'block';
+        btnChangeAnswer.style.display = 'inline';
+        lastAnswerDateText.style.display = 'block';
+        btnYes.style.display = 'none';
+        btnNo.style.display = 'none';
+    }
+    // Answer is no
+    else if (dbData.lastAnswer === 'no') {
+        load();
+        resultHeader.innerHTML = uiData.resultHeaderNo;
+        lastAnswerDateText.innerHTML = `${uiData.lastAnswerHeading} ${dbData.lastAnswerDate}`;
+        resultImg.src = uiData.noImgLink;
+        resultDiv.style.display = 'block';
+        btnChangeAnswer.style.display = 'inline';
+        lastAnswerDateText.style.display = 'block';
+        btnYes.style.display = 'none';
+        btnNo.style.display = 'none';
+    }
+    // No valid answer (yes / no) available
+    else {
+        load();
+        btnYes.style.display = 'inline';
+        btnNo.style.display = 'inline';
+        resultDiv.style.display = 'none';
+        btnChangeAnswer.style.display = 'none';
+        lastAnswerDateText.style.display = 'none';
+    }
+};
+
+
+
 /* BUTTONS CLICKED
--------------------------------- */
+---------------------------------------------------- */
 const yesClicked = () => {
     setData('yes');
     setUI();
@@ -103,85 +174,41 @@ const changeAnswerClicked = () => {
 };
 
 
-/* GET TODAY'S DATE
--------------------------------- */
-const getTodaysDate = () => {
-    return new Date().toUTCString();
-};
-
-
-/* GET IP
--------------------------------- */
-async function getIP() {
-    try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const jsonObj = (res.json()).then(d => dbData.lastAnswerIP = d.ip);
-    } catch (err) {
-        console.error(err);
-    }
-}
-
 
 /* SET DATA
--------------------------------- */
+---------------------------------------------------- */
 const setData = (answer) => {
+    // submissions array cannot be undefined, this will cause an error when using push!
+    // if submissions array is undefined 
+    if (dbData.submissionsArr === undefined) {
+        // set to empty array
+        dbData.submissionsArr = [];
+    }
+
     // set data
     dbData.lastAnswer = answer;
     dbData.lastAnswerDate = getTodaysDate();
     
-    if (answer !== '') {
-        getIP();
+    // record a submission only if answer is yes or no
+    if (answer === 'yes' || answer === 'no') {
         
-        // push to submission tracking array / DB
+        // push submissions array
         dbData.submissionsArr.push({
             answer: dbData.lastAnswer,
             answerDate: dbData.lastAnswerDate,
             submissionIP: dbData.lastAnswerIP
         });
-        console.log(dbData);
+
+        // send data to Firestore
+        setFirebaseDataToLocalObj();
     }
 };
 
 
-/* SET UI 
--------------------------------- */
-const setUI = (doc) => {
 
-    // set header title
-    header.innerHTML = `${data.valentinesFirstName} ${data.valentinesLastName}<br>${data.headerMessage}`;
-
-    // No answer yet
-    if (dbData.lastAnswer === '') {
-        load();
-        btnYes.style.display = 'inline';
-        btnNo.style.display = 'inline';
-        resultDiv.style.display = 'none';
-        btnChangeAnswer.style.display = 'none';
-        lastAnswerDateText.style.display = 'none';
-    }
-    // Answer is yes
-    else if (dbData.lastAnswer === 'yes') {
-        load();
-        resultHeader.innerHTML = data.resultHeaderYes;
-        lastAnswerDateText.innerHTML = `${data.lastAnswerHeading} ${dbData.lastAnswerDate}`;
-        resultImg.src = data.yesImgLink;
-        resultDiv.style.display = 'block';
-        btnChangeAnswer.style.display = 'inline';
-        lastAnswerDateText.style.display = 'block';
-        btnYes.style.display = 'none';
-        btnNo.style.display = 'none';
-    }
-    // Answer is no
-    else if (dbData.lastAnswer === 'no') {
-        load();
-        resultHeader.innerHTML = data.resultHeaderNo;
-        lastAnswerDateText.innerHTML = `${data.lastAnswerHeading} ${dbData.lastAnswerDate}`;
-        resultImg.src = data.noImgLink;
-        resultDiv.style.display = 'block';
-        btnChangeAnswer.style.display = 'inline';
-        lastAnswerDateText.style.display = 'block';
-        btnYes.style.display = 'none';
-        btnNo.style.display = 'none';
-    }
+/* GET TODAY'S DATE
+---------------------------------------------------- */
+const getTodaysDate = () => {
+    return new Date().toUTCString();
 };
-setUI();
+

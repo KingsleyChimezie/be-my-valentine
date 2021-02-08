@@ -6,7 +6,7 @@
 
 /* FIREBASE CONFIG
 -------------------------------- */
-let firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyDqh0NM-ZRNIW-Csl-YQS3J6BOAjkUt68o",
     authDomain: "kcc-be-my-valentine.firebaseapp.com",
     databaseURL: "https://kcc-be-my-valentine-default-rtdb.europe-west1.firebasedatabase.app",
@@ -18,14 +18,19 @@ let firebaseConfig = {
 };
 
 
-/* VALENTINE'S DATA
-    This is only needed on initial run
+/* CLOUD FIRESTORE CONFIG
 -------------------------------- */
-let data = {
-    cloudFirestoreId: 'test',
+const firestore = {
+    collectionName: 'valentines',
+    docID: 'test'
+};
+
+
+/* UI DATA
+-------------------------------- */
+const uiData = {
     valentinesFirstName: 'Ashley',
     valentinesLastName: 'Testington',
-
     headerMessage: 'will you bee my Valentine? 🌹',
     resultHeaderYes: 'You said yes! 😍',
     resultHeaderNo: 'You said no 😢',
