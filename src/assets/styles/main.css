@@ -2,6 +2,26 @@
  * Created Date: Friday, 5th February 2021, 2:50:43 am
  * Author: Kingsley Chimezie
  */
+::-moz-selection {
+  background: red;
+}
+::selection {
+  background: red;
+}
+
+::-moz-selection {
+  background: red;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: -webkit-gradient(linear, left top, left bottom, from(#e73c7e), to(#23a6d5));
+  background: linear-gradient(#e73c7e, #23a6d5);
+}
+
 body {
   background-color: #ddd;
   text-align: center;

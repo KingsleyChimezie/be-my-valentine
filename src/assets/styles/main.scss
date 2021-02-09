@@ -2,7 +2,27 @@
  * Created Date: Friday, 5th February 2021, 2:50:43 am
  * Author: Kingsley Chimezie
  */
+ 
+ 
+ $gradColor: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+ $gradColor2: linear-gradient(#e73c7e, #23a6d5);
 
+ // TEXT SELECTING COLOUR
+ ::selection {
+    background: red;
+}
+::-moz-selection {
+    background: red;
+}
+
+
+// SCROLLBAR COLOUR
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: $gradColor2; 
+}
 
 body {
     background-color: #ddd;
@@ -10,7 +30,7 @@ body {
     margin: 0;
     padding: 25px;
 
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background: $gradColor;
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
 
@@ -27,9 +47,10 @@ body {
             background-position: 0% 50%;
         }
     }
-    
+
     #mainContainer {
         padding: 10px;
+
         #loaderHeart {
             margin-top: 100px;
         }
@@ -38,7 +59,7 @@ body {
             margin-top: 25px;
             margin-bottom: 25px;
         }
-        
+
         #bee {
             margin-top: 80px;
             margin-bottom: 20px;
@@ -49,13 +70,15 @@ body {
                 margin-top: -25px;
             }
         }
-        
+
         #credit {
             margin-top: 75px;
+
             a {
                 text-decoration: none;
                 color: #0e4b4b;
             }
+
             #heart {
                 display: inline-block;
             }
@@ -98,6 +121,7 @@ body {
                 #resultHeader {
                     margin-top: none;
                 }
+
                 #resultImg {
                     width: 100%;
                 }
