@@ -1,55 +1,64 @@
-# KMP README TEMPLATE
-Description - enter a short description
+# Be My Valentine 🌹   
 
-## Prerequisites
-* prereq 1
-* prereq 2
+## By Kingsley Chimezie  
 
+### Intro 🎤 ###
 
-## Instructions
+In the mist of Covid-19 boredom, here's a simple web project with a clean UI... For that special someone on valentine's day 😉.  
 
-### Video Guide
-[![<Enter Alt Text - KMP>](http://img.youtube.com/vi/xgejrQbZO7o/0.jpg)](https://youtu.be/xgejrQbZO7o "KMP Website initialiser setup guide")
+HAPPY VALENTINE'S DAY 2021!
 
-### Written Guide
-1. Step 1   
-***"instructions"***  
-```Multi link code```
+### The Project 📦 ###
+Using Firebase and Cloud Firestore database, this project allows you to interactively ask the user to be your Valentine.  
+I've left some console logs in my code to show all data being retrieved from, and sent to Cloud Firestore.  
 
+Data stored in Cloud Firestore database:
+- User's answer from a button click (yes/no)
+- User's timestamp at the time of answer
+- User's public IP
 
-2. Step 2  
+[Project Demo](https://demo.kingsley.tech/be-my-valentine)  
 
-- 2.2
+Made with ❤ using:  
+- [JavaScript (ES6+)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)  
+- [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)  
+- [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)  
+- [SCSS](https://sass-lang.com/documentation/syntax)  
+- [Bootstrap 4](https://getbootstrap.com/docs/4.0/getting-started/introduction/)  
+- [w3.css](https://www.w3schools.com/w3css/defaulT.asp)  
+- [Firebase](https://firebase.google.com/)  
+    - [Cloud Firestore](https://firebase.google.com/docs/firestore)  
+- [ipify API](https://www.ipify.org/)  
 
-- 2.3  
+### Prerequisites ✅ ###
+1. You'll need a Firebase account
+    - Create or use existing project
+    - Make sure Cloud Firestore database is enabled
 
+### Written Guide 📃 ###
+1. Complete the Prerequisites
+1. In **settings.js**:
+    - add your Firebase config
+    - fill in your values for firestore and uiData objects
 
----
-## License
-* MIT - Copyright (c) 2019 Kingsley Chimezie - Kingsley Media Productions
+### License 📜 ###
+- MIT
 
-## Project People
+See LICENSE.md
+
+### Versions 🔢 ###
+- [Bitbucket Repository](https://bitbucket.org/KingsleyChimezie/be-my-valentine/downloads/?tab=tags)
+- [GitHub Repository](https://github.com/KingsleyChimezie/be-my-valentine/releases)
+
+### Acknowledgments 👏 ###
+- [Caitlin Haaf](https://codepen.io/caitlinhaaf/pen/KKpgpqX) - Original SVG and animation for the bee
+
+### Project People 👥 ###
 | Name                	|  Title              	|  Authority Level      | Website                  	|
 |-------------------	| -------------------	| -------------------	|--------------------------	|
 | Kingsley Chimezie 	|  Author +        	    |  Admin +        	    | http://www.kingsley.tech 	|
 
-[Click here for **title** and **authority level** definitions.](https://bitbucket.org/kingsleymedia-team/kmp-repo-template/src/master/copy-this-and-use-as-repo/assets/title.md)
+[**Title** and **authority level** definitions.](https://gist.github.com/KingsleyChimezie/5db14710db85ea34353ce64d272c5966)
 
-## Acknowledgments
-*
-## Versions
-- [Click here](https://url-where-versions-are-kept)
-
-
-
-## References
-* Title  
-http://enter-link.com  
-[ACCESSED: dd.mm.yyyy]
-
-* Title  
-http://enter-link.com  
-[ACCESSED: dd.mm.yyyy]
-* Title  
-http://enter-link.com  
-[ACCESSED: dd.mm.yyyy]
+---
+© Kingsley Chimezie | [Kingsley Chimezie Creations](https://kingsley.tech)
