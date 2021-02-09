@@ -26,72 +26,7 @@ let dbData = {
     submissionsArr: []
 };
 
-
-
-/* GET PUBLIC IP
-************************************************************************************/
-const getIP = async () => {
-    try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const jsonObj = (res.json()).then(d => dbData.lastAnswerIP = d.ip);
-    } catch (err) {
-        console.error(err);
-    }
-};
-getIP();
-
-
-
-/* FIREBASE
-************************************************************************************/
-
-// INITIALISE FIREBASE
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-const db = firebase.firestore();
-
-
-// Get Firebase data
-const getFirebaseData = async () => {
-    try {
-        // get collection document data, where the doc's ID matches the defined ID
-        const ref = db.collection(firestore.collectionName).doc(firestore.docID);
-        const doc = await ref.get();
-        const docData = doc.data();
-
-        // document does not exist
-        if (!doc.exists) {
-            setUI();
-            console.log(`Firstore collection '${firestore.collectionName}' with document ID '${firestore.docID}' does not exist.`);
-        } 
-        // document does exist
-        else {
-            setLocalObjToFirebaseData(docData);
-        }
-        
-    } catch (err) {
-        console.error(err);
-    }
-};
-getFirebaseData();
-
-
-// setting Firebase data to local object
-const setLocalObjToFirebaseData = (docData) => {
-    dbData.lastAnswer = docData.lastAnswer;
-    dbData.lastAnswerDate = docData.lastAnswerDate;
-    dbData.lastAnswerIP = docData.lastAnswerIP;
-    dbData.submissionsArr = docData.submissionsArr;
-    console.log('DATA RETRIEVED FROM FIRESTORE: ', dbData);
-    setUI();
-};
-
-
-// setting Firebase data
-const setFirebaseDataToLocalObj = () => {
-    const ref = db.collection('valentines').doc(firestore.docID).set(dbData, { merge: true });
-    console.log('DATA ADDED TO FIRESTORE: ', dbData);
-};
+let db;
 
 
 /* LOADER
@@ -111,9 +46,7 @@ const load = () => {
     }, 2000);
 };
 
-
-
-/* SET UI 
+/* SET UI ELEMENTS
 ---------------------------------------------------- */
 const setUI = () => {
     // set header title
@@ -153,31 +86,116 @@ const setUI = () => {
         lastAnswerDateText.style.display = 'none';
     }
 };
+setUI();
 
 
-
-/* BUTTONS CLICKED
+/* HIDE UI ELEMENTS
 ---------------------------------------------------- */
-const yesClicked = () => {
-    setData('yes');
+const hideUI = msg => {
+    header.innerHTML = msg;
+    btnYes.style.display = 'none';
+    btnNo.style.display = 'none';
+    resultDiv.style.display = 'none';
+    btnChangeAnswer.style.display = 'none';
+    lastAnswerDateText.style.display = 'none';
+};
+
+
+
+/* GET PUBLIC IP
+************************************************************************************/
+const getIP = async () => {
+    try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const jsonObj = (res.json()).then(d => dbData.lastAnswerIP = d.ip);
+    } catch (err) {
+        console.error(err);
+    }
+}; 
+
+
+
+// TRY TO PROCESS FIREBASE DATA, IF ERROR THEN HIDE SOME UI ELEMENTS
+try {
+
+    /* FIREBASE
+    ************************************************************************************/
+    // INITIALISE FIREBASE
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+    this.db = firebase.firestore();
+
+
+    // Get Firebase data
+    const getFirebaseData = async () => {
+        try {
+            // get collection document data, where the doc's ID matches the defined ID
+            const ref = this.db.collection(firestore.collectionName).doc(firestore.docID);
+            const doc = await ref.get();
+            const docData = doc.data();
+
+            // document does not exist
+            if (!doc.exists) {
+                console.log(`Firstore collection '${firestore.collectionName}' with document ID '${firestore.docID}' does not exist.`);
+            } 
+            // document does exist
+            else {
+                setLocalObjToFirebaseData(docData);
+            }
+            
+        } catch (err) {
+            errHeading = 'Error Getting Data From Firebase:<br>' + err.code;
+            console.error(err);
+            hideUI(errHeading);
+        }
+    };
+    getFirebaseData();
+    
+} catch (err) {
+    let msg = 'Error Getting Data From Firebase:<br>' + err.code;
+    console.log(err);
+    hideUI(msg);
+}
+
+
+// setting Firebase data to local object
+const setLocalObjToFirebaseData = (docData) => {
+    dbData.lastAnswer = docData.lastAnswer;
+    dbData.lastAnswerDate = docData.lastAnswerDate;
+    dbData.lastAnswerIP = docData.lastAnswerIP;
+    dbData.submissionsArr = docData.submissionsArr;
+    console.log('DATA RETRIEVED FROM FIRESTORE: ', dbData);
     setUI();
 };
 
-const noClicked = () => {
-    setData('no');
-    setUI();
+
+// setting Firebase data
+const setFirebaseDataToLocalObj = () => {
+    try {
+        const ref = this.db.collection('valentines').doc(firestore.docID).set(dbData, { merge: true });
+        console.log('DATA SENT TO FIRESTORE: ', dbData);
+        setUI();
+        
+    } catch (err) {
+        let msg = 'Error Sending Data To Firebase:<br>' + err.code;
+        console.log(err);
+        hideUI(msg);
+    }
 };
 
-const changeAnswerClicked = () => {
-    setData('');
-    setUI();
-};
 
+/* GET TODAY'S DATE
+---------------------------------------------------- */
+const getTimestamp = () => {
+    return new Date().toUTCString();
+};
 
 
 /* SET DATA
 ---------------------------------------------------- */
 const setData = (answer) => {
+    getIP();
+    
     // submissions array cannot be undefined, this will cause an error when using push!
     // if submissions array is undefined 
     if (dbData.submissionsArr === undefined) {
@@ -204,11 +222,22 @@ const setData = (answer) => {
     }
 };
 
-
-
-/* GET TODAY'S DATE
+/* BUTTONS CLICKED
 ---------------------------------------------------- */
-const getTimestamp = () => {
-    return new Date().toUTCString();
+const yesClicked = () => {
+    getIP();
+    setData('yes');
 };
+
+const noClicked = () => {
+    getIP();
+    setData('no');
+};
+
+const changeAnswerClicked = () => {
+    setData('');
+    setUI();
+};
+
+
 
