@@ -187,7 +187,7 @@ const setData = (answer) => {
 
     // set data
     dbData.lastAnswer = answer;
-    dbData.lastAnswerDate = getTodaysDate();
+    dbData.lastAnswerDate = getTimestamp();
     
     // record a submission only if answer is yes or no
     if (answer === 'yes' || answer === 'no') {
@@ -208,7 +208,7 @@ const setData = (answer) => {
 
 /* GET TODAY'S DATE
 ---------------------------------------------------- */
-const getTodaysDate = () => {
+const getTimestamp = () => {
     return new Date().toUTCString();
 };
 
