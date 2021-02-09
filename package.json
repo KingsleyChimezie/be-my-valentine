@@ -1,15 +1,21 @@
 {
   "name": "be-my-valentine",
   "version": "1.0.0",
-  "description": "Web based 'be my valentine' invitation.",
+  "description": "simple web based 'be my valentine' invitation, untilising Firebase's Cloud Firestore Database.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingsleychimezie/be-my-valetine.git"
+  },
   "keywords": [
     "valentine's",
-    "day"
+    "valentines day",
+    "firebase",
+    "lockdown love"
   ],
   "author": "Kingsley Chimezie",
-  "license": "ISC"
+  "license": "MIT"
 }
