@@ -6,16 +6,7 @@
 
 /* FIREBASE CONFIG
 -------------------------------- */
-const firebaseConfig = {
-    apiKey: "AIzaSyDqh0NM-ZRNIW-Csl-YQS3J6BOAjkUt68o",
-    authDomain: "kcc-be-my-valentine.firebaseapp.com",
-    databaseURL: "https://kcc-be-my-valentine-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "kcc-be-my-valentine",
-    storageBucket: "kcc-be-my-valentine.appspot.com",
-    messagingSenderId: "461637234904",
-    appId: "1:461637234904:web:0cb468809b249c602867ad",
-    measurementId: "G-QD987DDLLQ"
-};
+// PASTE YOUR WEB APP FIREBASE CONFIG HERE
 
 
 /* CLOUD FIRESTORE CONFIG
