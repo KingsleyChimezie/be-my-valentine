@@ -25,6 +25,7 @@ Made with ❤ using:
 - [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)  
 - [SCSS](https://sass-lang.com/documentation/syntax)  
 - [Bootstrap 4](https://getbootstrap.com/docs/4.0/getting-started/introduction/)  
+- [Animate.css](https://animate.style/)  
 - [w3.css](https://www.w3schools.com/w3css/defaulT.asp)  
 - [Firebase](https://firebase.google.com/)  
 - [Cloud Firestore](https://firebase.google.com/docs/firestore)  
