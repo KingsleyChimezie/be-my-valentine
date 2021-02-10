@@ -172,7 +172,7 @@ const setLocalObjToFirebaseData = (docData) => {
 // setting Firebase data
 const setFirebaseDataToLocalObj = () => {
     try {
-        const ref = this.db.collection('valentines').doc(firestore.docID).set(dbData, { merge: true });
+        const ref = this.db.collection(firestore.collectionName).doc(firestore.docID).set(dbData, { merge: true });
         console.log('DATA SENT TO FIRESTORE: ', dbData);
         setUI();
         
